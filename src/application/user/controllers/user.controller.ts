@@ -8,7 +8,7 @@ import {
     Put,
   } from '@nestjs/common';
   import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UserDto } from '../DTOS/common/user-dto';
+import { UserDto } from '../DTOS/common/create-user-dto';
 import { UserService } from '../services/user.service';
 import { UpdateUserDto } from '../DTOS/requests/user-update.dto';
   
