@@ -18,7 +18,6 @@ export class User extends Document {
     @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, {
       message: 'password too weak',
     })
-
     @IsString()
     @Prop({required: true})
     password: string;
