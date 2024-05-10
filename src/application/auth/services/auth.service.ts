@@ -2,9 +2,9 @@ import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { HashService } from '../../utils/services/hash.service';
 import { JwtPayload, Tokens } from '../types';
-import { UserService } from 'src/modules/users/services/users.service';
-import { UserRegisterDto } from '../DTOS/common/requests/user-register-dto';
-import { UserLogInDto } from '../DTOS/common/requests/user-logIn-dto';
+import { UserService } from 'src/application/user/services/user.service';
+import { UserRegisterDto } from '../DTOS/common/user-register-dto';
+import { UserLogInDto } from '../DTOS/common/user-logIn-dto';
 
 @Injectable()
 export class AuthService {
@@ -14,14 +14,14 @@ export class AuthService {
     private readonly hashService: HashService,
   ) {}
 
-  async logIn(userLogIn: UserLogInDto) {
-    const user = await this.userService.findOneByEmail(userLogIn.email);
+  async logIn(userLogInDto: UserLogInDto) {
+    const user = await this.userService.findOneByEmail(userLogInDto.email);
     if (!user) {
       throw new BadRequestException('User not found');
     }
 
     const isPasswordValid = await this.hashService.compare(
-        userLogIn.password,
+      userLogInDto.password,
       user.password,
     );
     if (!isPasswordValid) {
@@ -40,34 +40,33 @@ export class AuthService {
 
     const user = await this.userService.create({
       email: userRegister.email,
-      username: userRegister.username,
+      userName: userRegister.username,
       password: hashedPassword,
       role: userRegister.role,
     });
 
-  }validateEmailForSignUp(email: any) {
-        throw new Error('Method not implemented.');
-    };
-
+    return await this.getTokens({
+      sub: user.id,
+    });
+  }
 
   async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {
     const secretKey = process.env.JWT_SECRET;
     if (!secretKey) {
-        throw new Error('JWT_SECRET is not set');
+      throw new Error('JWT_SECRET is not set');
     }
-
-    const accesTokenOptions = {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m'
+    const accessTokenOptions = {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m',
     };
 
     const accessToken = await this.signToken(
-        jwtPayload,
-        secretKey,
-        accesTokenOptions
+      jwtPayload,
+      secretKey,
+      accessTokenOptions,
     );
 
-    return { access_token: accessToken}
-  }  
+    return { access_token: accessToken };
+  }
 
   async signToken(payload: JwtPayload, secretKey: string, options: any) {
     return await this.jwtService.signAsync(payload, {
