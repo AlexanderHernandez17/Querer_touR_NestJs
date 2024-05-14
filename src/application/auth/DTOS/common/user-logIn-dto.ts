@@ -9,6 +9,7 @@ import {
 } from 'class-validator';
 
 export class UserLogInDto {
+  
   @ApiProperty()
   @IsEmail()
   @IsString()

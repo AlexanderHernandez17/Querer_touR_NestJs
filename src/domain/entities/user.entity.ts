@@ -1,6 +1,7 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { IsEmail, IsString, Length, Matches } from "class-validator";
 import { UserRole } from "./role.entity";
+import { Document } from 'mongoose';
 
 @Schema({timestamps: true})
 export class User extends Document {
@@ -25,3 +26,5 @@ export class User extends Document {
     @Prop({ type: String, enum: UserRole, default: UserRole.USER })
     role: string;
 }
+
+export const UserSchema = SchemaFactory.createForClass(User);
