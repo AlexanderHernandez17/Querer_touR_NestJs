@@ -29,6 +29,9 @@ export class AuthService {
     }
 
     return await this.getTokens({
+      userName: user.userName,
+      email: user.email,
+      role: user.role,
       sub: user.id,
     });
   }
@@ -46,6 +49,9 @@ export class AuthService {
     });
 
     return await this.getTokens({
+      userName: userRegister.userName,
+      email: user.email,
+      role: user.role,
       sub: user.id,
     });
   }
