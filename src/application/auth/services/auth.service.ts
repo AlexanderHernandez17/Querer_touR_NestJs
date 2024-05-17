@@ -25,13 +25,14 @@ export class AuthService {
       user.password,
     );
     if (!isPasswordValid) {
-      throw new BadRequestException('Incorrect password');
+      throw new BadRequestException('Incorrect password or email');
     }
 
     return await this.getTokens({
       uuid: user.uuid,
       userName: user.userName,
       email: user.email,
+      password: user.password,
       role: user.role,
       sub: user.id,
     });
@@ -41,9 +42,10 @@ export class AuthService {
     await this.validateEmailForSignUp(userRegister.email);
 
     const hashedPassword = await this.hashService.hash(userRegister.password);
+    const hashedEmail = await this.hashService.hashEmail(userRegister.email);
 
     const user = await this.userService.create({
-      email: userRegister.email,
+      email: hashedEmail,
       userName: userRegister.userName,
       password: hashedPassword,
       role: userRegister.role,
@@ -53,6 +55,7 @@ export class AuthService {
       uuid: user.uuid,
       userName: user.userName,
       email: user.email,
+      password: user.password,
       role: user.role,
       sub: user.id,
     });
