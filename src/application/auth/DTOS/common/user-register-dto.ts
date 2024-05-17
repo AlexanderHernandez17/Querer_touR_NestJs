@@ -18,7 +18,7 @@ export class UserRegisterDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  username: string;
+  userName: string;
 
   @ApiProperty()
   @IsNotEmpty()

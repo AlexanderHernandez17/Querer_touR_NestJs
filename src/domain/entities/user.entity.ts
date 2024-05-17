@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { IsEmail, IsString, Length, Matches } from "class-validator";
+import { IsEmail, IsEnum, IsString, Length, Matches } from "class-validator";
 import { UserRole } from "./role.entity";
 import { Document } from 'mongoose';
 
@@ -23,6 +23,7 @@ export class User extends Document {
     @Prop({required: true})
     password: string;
 
+    @IsEnum(UserRole)
     @Prop({ type: String, enum: UserRole, default: UserRole.USER })
     role: string;
 }
