@@ -11,7 +11,7 @@ import { UserModule } from "../user/user.module";
   imports: [
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m' },
+      signOptions: { expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '30m' },
     }),
     UtilsModule,
     UserModule,
