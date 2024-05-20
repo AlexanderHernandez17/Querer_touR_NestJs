@@ -13,12 +13,12 @@ export class HashService {
     return bcrypt.compare(password, hash);
   }
 
-  async hashEmail(email: string): Promise<string> {
-    const saltOrRounds = await bcrypt.genSalt();
-    return bcrypt.hash(email, saltOrRounds);
-  }
+  // async hashEmail(email: string): Promise<string> {
+  //   const saltOrRounds = await bcrypt.genSalt();
+  //   return bcrypt.hash(email, saltOrRounds);
+  // }
 
-  async compareEmail(email: string, hash: string): Promise<boolean> {
-    return bcrypt.compare(email, hash);
-  }
+  // async compareEmail(email: string, hash: string): Promise<boolean> {
+  //   return bcrypt.compare(email, hash);
+  // }
 }
