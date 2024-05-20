@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 async function main() {
-  const uri = 'mongodb+srv://pipe2893:XmYhO47hRMvEH2eX@querertour.cgwsysy.mongodb.net/Querer_Nestjs?retryWrites=true&w=majority&ssl=true';
+  const uri = 'add-your-mongodb-url-for-test-the-conecction';
 
   const client = new MongoClient(uri);
 
