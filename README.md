@@ -55,6 +55,14 @@ To run the project locally, clone the repository and set up the necessary enviro
     ```
    These steps ensure that you have all the necessary configuration to run the project locally, adjusting the environment variables according to the needs of your development environment..
 
+   ## Auth
+
+- JWT secret generator command
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
 ## Running the app
 
 ```bash
@@ -81,13 +89,6 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Auth
-
-- JWT secret generator command
-
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-```
 
 ## Support
 

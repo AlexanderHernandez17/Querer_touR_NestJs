@@ -42,10 +42,11 @@ export class AuthService {
     await this.validateEmailForSignUp(userRegister.email);
 
     const hashedPassword = await this.hashService.hash(userRegister.password);
-    const hashedEmail = await this.hashService.hashEmail(userRegister.email);
+    // const hashedEmail = await this.hashService.hashEmail(userRegister.email);
 
     const user = await this.userService.create({
-      email: hashedEmail,
+      // email: hashedEmail,
+      email: userRegister.email,
       userName: userRegister.userName,
       password: hashedPassword,
       role: 'user',
