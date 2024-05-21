@@ -5,7 +5,14 @@ import { AllExceptionsFilter } from './filters/http-exeption.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new AllExceptionsFilter());
-  const port = process.env.PORT || 3000;
+  
+  app.enableCors({
+    origin: 'http://localhost:3000', // Cambia esto al origen de tu aplicación Next.js
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: false,
+  });
+  
+  const port = process.env.PORT || 3010;
   
   app.setGlobalPrefix('v1/')
   await app.listen(port);

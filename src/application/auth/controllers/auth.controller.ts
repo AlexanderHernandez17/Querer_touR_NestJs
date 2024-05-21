@@ -25,7 +25,6 @@ import {
     @ApiResponse({ status: 400, description: 'Bad Request' })
     async register(@Body() signUpDto: UserRegisterDto) {
       const token = await this.authService.register(signUpDto);
-      return { access_token: token.access_token };
     }
 
     @Public()

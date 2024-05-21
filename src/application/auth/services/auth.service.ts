@@ -38,7 +38,7 @@ export class AuthService {
     });
   }
 
-  async register(userRegister: UserRegisterDto): Promise<Tokens> {
+  async register(userRegister: UserRegisterDto) {
     await this.validateEmailForSignUp(userRegister.email);
 
     const hashedPassword = await this.hashService.hash(userRegister.password);
@@ -49,18 +49,9 @@ export class AuthService {
       email: userRegister.email,
       userName: userRegister.userName,
       password: hashedPassword,
-      role: userRegister.role,
+      role: 'user',
     });
-
-    return await this.getTokens({
-      uuid: user.uuid,
-      userName: user.userName,
-      email: user.email,
-      password: user.password,
-      role: user.role,
-      sub: user.id,
-    });
-  }
+  };
 
   async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {
     const secretKey = process.env.JWT_SECRET;
