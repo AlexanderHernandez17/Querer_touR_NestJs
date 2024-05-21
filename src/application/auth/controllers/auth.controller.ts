@@ -7,7 +7,7 @@ import {
     Post,
     UseGuards,
   } from '@nestjs/common';
-  import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+  import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
   import { AutGuard } from '../guard/auth.guard';
   import { Public } from 'src/application/decorators';
   import { AuthService } from '../services/auth.service';
@@ -22,8 +22,10 @@ import {
     @Public()
     @Post('register')
     @HttpCode(HttpStatus.CREATED)
+    @ApiOperation({ summary: 'Register a new user' })
+    @ApiBody({ type: UserRegisterDto, description: 'The user registration data' })
     @ApiResponse({ status: 201, description: 'User registered successfully.' })
-    @ApiResponse({ status: 400, description: 'Bad Request' })
+    @ApiBadRequestResponse({ description: 'Bad Request' })
     async register(@Body() userRegisterDto: UserRegisterDto) {
       try {
         const tokens = await this.authService.register(userRegisterDto);
@@ -36,8 +38,10 @@ import {
     @Public()
     @Post('login')
     @HttpCode(HttpStatus.OK)
-    @ApiResponse({ status: 201, description: 'User registered successfully.' })
-    @ApiResponse({ status: 400, description: 'Bad Request' })
+    @ApiOperation({ summary: 'Log in an existing user' })
+    @ApiBody({ type: UserLogInDto, description: 'The user login data' })
+    @ApiResponse({ status: 200, description: 'User logged in successfully.' })
+    @ApiBadRequestResponse({ description: 'Bad Request' })
     async logIn(@Body() userLogInDto: UserLogInDto) {
       try {
         const tokens = await this.authService.logIn(userLogInDto);

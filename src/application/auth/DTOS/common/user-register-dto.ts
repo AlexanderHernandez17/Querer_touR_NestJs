@@ -27,7 +27,9 @@ export class UserRegisterDto {
   @MaxLength(50, { message: 'password should be maximium 50' })
   password: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
+  @Transform(({ value }) => value.toUpperCase())
   role: string;
 }
