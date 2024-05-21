@@ -38,20 +38,53 @@ export class AuthService {
     });
   }
 
-  async register(userRegister: UserRegisterDto) {
-    await this.validateEmailForSignUp(userRegister.email);
+  async register(userRegister: UserRegisterDto): Promise<Tokens> {
+    const { email, userName, password, role } = userRegister;
 
-    const hashedPassword = await this.hashService.hash(userRegister.password);
-    // const hashedEmail = await this.hashService.hashEmail(userRegister.email);
+    // Validar que todos los campos estén presentes
+    if (!email || !userName || !password || !role) {
+      throw new BadRequestException('All fields are required');
+    }
 
-    const user = await this.userService.create({
-      // email: hashedEmail,
-      email: userRegister.email,
-      userName: userRegister.userName,
+    // Validar el formato de email
+    if (!this.isValidEmail(email)) {
+      throw new BadRequestException('Invalid email format');
+    }
+
+    // Validar longitud mínima de contraseña
+    if (password.length < 8) {
+      throw new BadRequestException('Password should be at least 8 characters long');
+    }
+
+    // Validar si el email ya está registrado
+    await this.validateEmailForSignUp(email);
+
+    // Hash de la contraseña
+    const hashedPassword = await this.hashService.hash(password);
+
+    // Crear el usuario
+    const newUser = await this.userService.create({
+      email,
+      userName,
       password: hashedPassword,
-      role: 'user',
+      role,
     });
-  };
+
+    // Generar tokens
+    return await this.getTokens({
+      uuid: newUser.uuid,
+      userName: newUser.userName,
+      email: newUser.email,
+      password: newUser.password, // No recomendado enviar la contraseña en el payload del token
+      role: newUser.role,
+      sub: newUser.id,
+    });
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
 
   async getTokens(jwtPayload: JwtPayload): Promise<Tokens> {
     const secretKey = process.env.JWT_SECRET;
