@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
     Body,
     Controller,
     HttpCode,
@@ -23,8 +24,13 @@ import {
     @HttpCode(HttpStatus.CREATED)
     @ApiResponse({ status: 201, description: 'User registered successfully.' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
-    async register(@Body() signUpDto: UserRegisterDto) {
-      const token = await this.authService.register(signUpDto);
+    async register(@Body() userRegisterDto: UserRegisterDto) {
+      try {
+        const tokens = await this.authService.register(userRegisterDto);
+        return { access_token: tokens.access_token };
+      } catch (error) {
+        throw new BadRequestException(error.message);
+      }
     }
 
     @Public()
@@ -33,9 +39,12 @@ import {
     @ApiResponse({ status: 201, description: 'User registered successfully.' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
     async logIn(@Body() userLogInDto: UserLogInDto) {
-      const token = await this.authService.logIn(userLogInDto);
-  
-      return { access_token: token.access_token };
+      try {
+        const tokens = await this.authService.logIn(userLogInDto);
+        return { access_token: tokens.access_token };
+      } catch (error) {
+        throw new BadRequestException(error.message);
+      }
     }
 
     @Post('check')
