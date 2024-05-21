@@ -3,7 +3,6 @@ import { Transform } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsString,
   MaxLength,
   MinLength,
@@ -12,14 +11,14 @@ import {
 export class UserRegisterDto {
 
   @ApiProperty()
-  @IsEmail()
-  @IsNotEmpty()
+  @IsEmail({}, { message: 'Invalid email format' })
+  @IsNotEmpty({ message: 'Email is required' })
   @Transform(({ value }) => value.toLowerCase())
   email: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'Password is required' })
+  @IsString({ message: 'Username must be a string' })
   userName: string;
 
   @ApiProperty()
